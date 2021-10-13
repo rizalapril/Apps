@@ -3,8 +3,11 @@ package com.kaspin.view.fragment
 import android.content.Context
 import android.content.Intent
 import android.view.View
+import android.widget.TextView
+import android.widget.Toast
 import android.widget.ViewFlipper
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +27,9 @@ class TransaksiFragment : BaseFragment() {
     var btnBack: ConstraintLayout? = null
     var transaksiList: RecyclerView? = null
     var btnOrder: ConstraintLayout? = null
+    var txtCheckout: TextView? = null
+    var btnCheckout: ConstraintLayout? = null
+    var btnCheckoutLyt: ConstraintLayout? = null
 
     override fun getLayoutResourceId(): Int = R.layout.fragment_transaksi
 
@@ -34,6 +40,10 @@ class TransaksiFragment : BaseFragment() {
         btnBack = parent.findViewById(R.id.btnBackTransaksi)
         btnOrder = parent.findViewById(R.id.btnPendingOrder)
         transaksiList = parent.findViewById(R.id.transaksiRecycleView)
+        txtCheckout = parent.findViewById(R.id.txtTitleCheckout)
+        btnCheckout = parent.findViewById(R.id.btnCheckout)
+        btnCheckoutLyt = parent.findViewById(R.id.btnCheckoutLayout)
+
         transaksiList?.layoutManager = LinearLayoutManager(activity as Context)
 
         transaksiAdapter = TransaksiAdapter(activity as Context, this)
@@ -42,6 +52,7 @@ class TransaksiFragment : BaseFragment() {
         viewModel.init(activity as Context)
         viewModel.loadBarangList()
         viewModel.createParentTransaksi()
+        viewModel.updateBtnCheckout()
     }
 
     override fun initListener() {
@@ -68,9 +79,41 @@ class TransaksiFragment : BaseFragment() {
                 }
             }
         })
+
+        viewModel.resultInsertDetail.observe(this, Observer { result ->
+            result?.let {
+                showNotification(it)
+            }
+        })
+
+        viewModel.resultUpdateDetail.observe(this, Observer { result ->
+            result?.let {
+                showNotification(it)
+            }
+        })
+
+        viewModel.resultCheckoutBtn.observe(this, Observer { result ->
+            result?.let {
+                if (it > 0){
+                    txtCheckout?.text = "Checkout (${it})"
+                    activity?.let { actvy ->
+                        btnCheckoutLyt?.setBackgroundTintList(ContextCompat.getColorStateList(actvy.applicationContext, R.color.color_green))
+                    }
+                }else{
+                    txtCheckout?.text = "Checkout (0)"
+                    activity?.let { actvy ->
+                        btnCheckoutLyt?.setBackgroundTintList(ContextCompat.getColorStateList(actvy.applicationContext, R.color.color_tint))
+                    }
+                }
+            }
+        })
     }
 
     fun addToCart(data: BarangDataClass){
         viewModel.addToCart(data)
+    }
+
+    fun showNotification(text: String){
+        Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
     }
 }

@@ -29,7 +29,7 @@ class SQLiteHelper(context: Context): SQLiteOpenHelper (context, Constants.DB_NA
         db?.execSQL(createTblTransaksi)
 
         val createTblDetailTransaksi = "CREATE TABLE IF NOT EXISTS ${Constants.TBL_DETAIL_TRANSAKSI} (" +
-                "${Constants._ID_DETAIL_TRANSAKSI} VARCHAR(50) UNIQUE, " +
+                "${Constants._ID_DETAIL_TRANSAKSI} VARCHAR(50) NOT NULL, " +
                 "${Constants._ID_BARANG} INTEGER NOT NULL, " +
                 "${Constants._KD_BARANG} VARCHAR(50) NOT NULL, " +
                 "${Constants._NAMA_BARANG} VARCHAR(225) NOT NULL, " +
@@ -257,5 +257,40 @@ class SQLiteHelper(context: Context): SQLiteOpenHelper (context, Constants.DB_NA
         }
 
         return data_
+    }
+
+    fun getAllCheckout(idDetailTransaksi: String): ArrayList<DetailTransaksi>{
+        val dataList: ArrayList<DetailTransaksi> = ArrayList()
+        val _query = "SELECT * FROM ${Constants.TBL_DETAIL_TRANSAKSI} WHERE id_detail_transaksi = ${idDetailTransaksi}"
+        val db = this.readableDatabase
+
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(_query, null)
+        }catch (e: Exception){
+            e.printStackTrace()
+            db.execSQL(_query)
+            return ArrayList()
+        }
+
+        var dataClass = DetailTransaksiDataClass()
+
+        cursor?.let {
+            if (cursor.moveToFirst()){
+                do {
+                    dataClass.id_detail_transaksi = cursor.getString(cursor.getColumnIndex("id_detail_transaksi"))
+                    dataClass.id_barang = cursor.getInt(cursor.getColumnIndex("id_barang"))
+                    dataClass.kode_barang = cursor.getString(cursor.getColumnIndex("kode_barang"))
+                    dataClass.nama_barang = cursor.getString(cursor.getColumnIndex("nama_barang"))
+                    dataClass.stock = cursor.getInt(cursor.getColumnIndex("stock"))
+
+                    val data = DetailTransaksi(dataClass.id_detail_transaksi, dataClass.id_barang, dataClass.kode_barang, dataClass.nama_barang, dataClass.stock)
+                    dataList.add(data)
+                }while (cursor.moveToNext())
+            }
+        }
+
+        return dataList
     }
 }

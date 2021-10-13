@@ -2,15 +2,12 @@ package com.kaspin.viewmodel
 
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.kaspin.data.model.Barang
 import com.kaspin.data.model.BarangDataClass
 import com.kaspin.data.model.DetailTransaksiDataClass
 import com.kaspin.data.model.HeaderTransaksiDataClass
 import com.kaspin.helper.SQLiteHelper
-import com.kaspin.util.CommonUtil
 import com.kaspin.util.Constants
 import com.kaspin.util.SharedPreferenceUtil
 
@@ -19,6 +16,9 @@ class TransaksiFragViewModel(application: Application): AndroidViewModel(applica
     private lateinit var sharedPref: SharedPreferenceUtil
 
     val resultBarangList = MutableLiveData<List<BarangDataClass>>()
+    val resultInsertDetail = MutableLiveData<String>()
+    val resultUpdateDetail = MutableLiveData<String>()
+    val resultCheckoutBtn = MutableLiveData<Int>()
 
     fun init(context: Context){
         sqLiteHelper = SQLiteHelper(context)
@@ -81,21 +81,31 @@ class TransaksiFragViewModel(application: Application): AndroidViewModel(applica
             val data = DetailTransaksiDataClass(id_detail_transaksi, data.id_barang, data.kode_barang, data.nama_barang, 1)
             val status = sqLiteHelper.insertDetailTransaksi(data)
             if (status > -1){
-//                loadBarangList()
-//            resultInsert.value = "success insert new barang"
+                updateBtnCheckout()
+                resultInsertDetail.value = "success add to cart"
             }else{
-//            resultInsert.value = "failed insert new barang"
+                resultInsertDetail.value = "failed add to cart"
             }
         }else{
             //update
             val data = DetailTransaksiDataClass(id_detail_transaksi, data.id_barang, data.kode_barang, data.nama_barang, detailTransaksi.stock + 1)
             val status = sqLiteHelper.updateDetailTransaksi(data)
             if (status > -1){
-//                loadBarangList()
-//            resultInsert.value = "success insert new barang"
+                updateBtnCheckout()
+                resultUpdateDetail.value = "success increase stock in cart"
             }else{
-//            resultInsert.value = "failed insert new barang"
+                resultUpdateDetail.value = "failed increase stock in cart"
             }
         }
+    }
+
+    fun updateBtnCheckout(){
+        val id_detail_transaksi = sharedPref.getString(Constants.PREF_ID_DETAIL_TRANSAKSI)
+
+        val detailTransaksi = sqLiteHelper.getAllCheckout(id_detail_transaksi)
+        if (detailTransaksi.size > 0){
+
+        }
+        resultCheckoutBtn.value = detailTransaksi.size
     }
 }
