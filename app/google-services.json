@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "384077587702",
+    "firebase_url": "https://kaspin-96898-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "kaspin-96898",
+    "storage_bucket": "kaspin-96898.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:384077587702:android:3c53bbdd0d37c79bb9f8d7",
+        "android_client_info": {
+          "package_name": "com.kaspin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "384077587702-kjlcce6v0bv9amirtnb0fm9rh4pumo4t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJ54wT2tq8f0i5_g5iDeXq8JiAOq-2fOQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "384077587702-kjlcce6v0bv9amirtnb0fm9rh4pumo4t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

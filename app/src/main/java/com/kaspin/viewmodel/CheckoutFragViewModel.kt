@@ -5,9 +5,9 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.kaspin.data.model.BarangDataClass
-import com.kaspin.data.model.DetailTransaksiDataClass
-import com.kaspin.data.model.HeaderTransaksiDataClass
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.kaspin.data.model.*
 import com.kaspin.helper.SQLiteHelper
 import com.kaspin.util.Constants
 import com.kaspin.util.SharedPreferenceUtil
@@ -15,6 +15,8 @@ import com.kaspin.util.SharedPreferenceUtil
 class CheckoutFragViewModel(application: Application): AndroidViewModel(application) {
     private lateinit var sqLiteHelper: SQLiteHelper
     private lateinit var sharedPref: SharedPreferenceUtil
+    private lateinit var dbFirebase: FirebaseDatabase
+    private lateinit var referance: DatabaseReference
 
     val resultCheckoutList = MutableLiveData<List<DetailTransaksiDataClass>>()
     val resultCheckoutSubmit = MutableLiveData<Boolean>()
@@ -25,6 +27,8 @@ class CheckoutFragViewModel(application: Application): AndroidViewModel(applicat
     fun init(context: Context){
         sqLiteHelper = SQLiteHelper(context)
         sharedPref = SharedPreferenceUtil(context)
+        dbFirebase = FirebaseDatabase.getInstance()
+        referance = dbFirebase.getReference("HeaderTransaksi")
     }
 
     fun loadCheckoutList(){
@@ -100,6 +104,36 @@ class CheckoutFragViewModel(application: Application): AndroidViewModel(applicat
             }
 
             resultSubmit.value = success
+        }
+    }
+
+    fun saveOrder(){
+        val id_detail_transaksi = sharedPref.getString(Constants.PREF_ID_DETAIL_TRANSAKSI)
+        val dataCheckout = sqLiteHelper.getAllCheckout(id_detail_transaksi)
+
+        if (dataCheckout.size > 0){
+            val header = sqLiteHelper.getTransaksiHeader(id_detail_transaksi)
+
+            var data = HeaderOrderFirebaseDataClass()
+            var arrList = ArrayList<DetailOrderFirebaseDataClass>()
+
+            for (i in dataCheckout){
+                var detail = DetailOrderFirebaseDataClass()
+                detail.id_detail_transaksi = id_detail_transaksi
+                detail.id_barang = i.id_barang
+                detail.kode_barang = i.kode_barang
+                detail.nama_barang = i.nama_barang
+                detail.stock = i.stock
+                arrList.add(detail)
+            }
+            data.id_transaksi = header.id_transaksi
+            data.id_detail_transaksi = header.id_detail_transaksi
+            data.nama_transaksi = header.nama_transaksi
+            data.status = 2
+            data.detail_order = arrList
+
+            val idHeader = referance.push().key
+            referance.child(idHeader?: "").setValue(data)
         }
     }
 }

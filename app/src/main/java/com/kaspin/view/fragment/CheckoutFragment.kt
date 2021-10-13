@@ -27,6 +27,8 @@ class CheckoutFragment : BaseFragment() {
     var btnBack: ConstraintLayout? = null
     var btnSubmit: ConstraintLayout? = null
     var btnSubmitLayout: ConstraintLayout? = null
+    var btnSaveOrder: ConstraintLayout? = null
+    var btnSaveOrderLayout: ConstraintLayout? = null
     var checkoutList: RecyclerView? = null
 
     override fun getLayoutResourceId(): Int = R.layout.fragment_checkout
@@ -38,6 +40,8 @@ class CheckoutFragment : BaseFragment() {
         btnBack = parent.findViewById(R.id.btnBackCheckout)
         btnSubmit = parent.findViewById(R.id.btnSubmitCheckout)
         btnSubmitLayout = parent.findViewById(R.id.btnSubmitLayout)
+        btnSaveOrder = parent.findViewById(R.id.btnSaveOrder)
+        btnSaveOrderLayout = parent.findViewById(R.id.btnSaveOrderLayout)
         checkoutList = parent.findViewById(R.id.checkoutRecycleView)
         checkoutList?.layoutManager = LinearLayoutManager(activity as Context)
 
@@ -57,6 +61,10 @@ class CheckoutFragment : BaseFragment() {
 
         btnSubmit?.setOnClickListener { v ->
             viewModel.submitCheckout()
+        }
+
+        btnSaveOrder?.setOnClickListener { v ->
+            viewModel.saveOrder()
         }
     }
 
@@ -78,10 +86,12 @@ class CheckoutFragment : BaseFragment() {
                 if (it){
                     activity?.let { actvy ->
                         btnSubmitLayout?.setBackgroundTintList(ContextCompat.getColorStateList(actvy.applicationContext, R.color.color_tint))
+                        btnSaveOrderLayout?.setBackgroundTintList(ContextCompat.getColorStateList(actvy.applicationContext, R.color.color_tint))
                     }
                 }else{
                     activity?.let { actvy ->
                         btnSubmitLayout?.setBackgroundTintList(ContextCompat.getColorStateList(actvy.applicationContext, R.color.color_green))
+                        btnSaveOrderLayout?.setBackgroundTintList(ContextCompat.getColorStateList(actvy.applicationContext, R.color.color_green))
                     }
                 }
             }

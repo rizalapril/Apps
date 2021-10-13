@@ -16,6 +16,7 @@ import com.kaspin.R
 import com.kaspin.base.BaseFragment
 import com.kaspin.data.model.BarangDataClass
 import com.kaspin.data.network.Checkout
+import com.kaspin.data.network.Order
 import com.kaspin.view.MainActivity
 import com.kaspin.view.adapter.TransaksiAdapter
 import com.kaspin.viewmodel.TransaksiFragViewModel
@@ -59,7 +60,9 @@ class TransaksiFragment : BaseFragment() {
 
     override fun initListener() {
         btnOrder?.setOnClickListener { v ->
-
+            var data = Order()
+            data.isOpen = true
+            EventBus.getDefault().post(data)
         }
 
         btnCheckout?.setOnClickListener { v ->
