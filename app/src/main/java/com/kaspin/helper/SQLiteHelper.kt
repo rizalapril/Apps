@@ -49,25 +49,27 @@ class SQLiteHelper(context: Context): SQLiteOpenHelper (context, DB_NAME, null, 
         return isSuccess
     }
 
-    fun updateBarang(data: BarangDataClass): Int{
+    fun updateBarang(data: Barang): Int{
         val db = this.writableDatabase
 
         val contentValues = ContentValues()
+        contentValues.put(_ID, data.id_barang)
+        contentValues.put(_KDBARANG, data.kode_barang)
         contentValues.put(_NAMABARANG, data.nama_barang)
         contentValues.put(_QTY, data.stock)
 
-        val success = db.update(TBL_BARANG, contentValues, "kode_barang=${data.kode_barang}", null)
+        val success = db.update(TBL_BARANG, contentValues, "id_barang=" + data.id_barang, null)
         db.close()
         return success
     }
 
-    fun deleteBarang(kodeBarang: String): Int{
+    fun deleteBarang(idBarang: Int): Int{
         val db = this.writableDatabase
 
         val contentValues = ContentValues()
-        contentValues.put(_KDBARANG, kodeBarang)
+        contentValues.put(_ID, idBarang)
 
-        val success = db.delete(TBL_BARANG, "kode_barang=${kodeBarang}", null)
+        val success = db.delete(TBL_BARANG, "id_barang=" + idBarang, null)
         db.close()
         return success
     }

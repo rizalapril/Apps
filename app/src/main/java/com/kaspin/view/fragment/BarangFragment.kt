@@ -17,6 +17,7 @@ import com.kaspin.view.MainActivity
 import com.kaspin.view.adapter.BarangAdapter
 import com.kaspin.view.dialog.BarangDialog
 import com.kaspin.viewmodel.BarangFragViewModel
+import kotlinx.android.synthetic.main.layout_dialog.*
 
 class BarangFragment: BaseFragment() {
 
@@ -30,6 +31,7 @@ class BarangFragment: BaseFragment() {
     var btnAdd: ConstraintLayout? = null
     var btnAddCircle: ConstraintLayout? = null
     var barangList: RecyclerView? = null
+    var layoutDialog: ConstraintLayout? = null
 
     override fun getLayoutResourceId(): Int = R.layout.barang_fragment
 
@@ -40,6 +42,7 @@ class BarangFragment: BaseFragment() {
         btnBack = parent.findViewById(R.id.btnBackBarang)
         btnAdd = parent.findViewById(R.id.btnAddMainBarang)
         btnAddCircle = parent.findViewById(R.id.btnAddBarangBlank)
+        layoutDialog = parent.findViewById(R.id.layoutDialog)
         barangList = parent.findViewById(R.id.recyclerView)
         barangList?.layoutManager = LinearLayoutManager(activity as Context)
 
@@ -76,6 +79,28 @@ class BarangFragment: BaseFragment() {
                 }
             }
         })
+
+        viewModel.resultInsert.observe(this, Observer { result ->
+            result?.let {
+                showNotification(it)
+            }
+        })
+
+        viewModel.resultUpdate.observe(this, Observer { result ->
+            result?.let {
+                showNotification(it)
+            }
+        })
+
+        viewModel.resultDelete.observe(this, Observer { result ->
+            result?.let {
+                showNotification(it)
+            }
+        })
+    }
+
+    fun dismissDialog(){
+        layoutDialog?.visibility = View.GONE
     }
 
     fun openAddBarangDialog(){
@@ -83,6 +108,7 @@ class BarangFragment: BaseFragment() {
         barangDialog = BarangDialog(activity, this as Fragment, (width*0.8).toInt(), (height*0.6).toInt(), false, null)
         barangDialog?.setCancelable(false)
         barangDialog?.show()
+        layoutDialog?.visibility = View.VISIBLE
     }
 
     fun editBarang(data: BarangDataClass){
@@ -90,15 +116,22 @@ class BarangFragment: BaseFragment() {
         barangDialog = BarangDialog(activity, this as Fragment, (width*0.8).toInt(), (height*0.6).toInt(), true, data)
         barangDialog?.setCancelable(false)
         barangDialog?.show()
+        layoutDialog?.visibility = View.VISIBLE
     }
 
     fun addBarang(kdBarang: String, namaBarang: String, stockBarang: Int){
         viewModel.insertBarang(kdBarang, namaBarang, stockBarang)
-        Toast.makeText(context, "success insert new barang", Toast.LENGTH_SHORT).show()
     }
 
-    fun updateBarang(kdBarang: String, namaBarang: String, stockBarang: Int){
-        viewModel.updateBarang(kdBarang, namaBarang, stockBarang)
-        Toast.makeText(context, "success update barang", Toast.LENGTH_SHORT).show()
+    fun updateBarang(idBarang: Int, kdBarang: String, namaBarang: String, stockBarang: Int){
+        viewModel.updateBarang(idBarang, kdBarang, namaBarang, stockBarang)
+    }
+
+    fun deleteBarang(idBarang: Int){
+        viewModel.deleteBarang(idBarang)
+    }
+
+    fun showNotification(text: String){
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 }

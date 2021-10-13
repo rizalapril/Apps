@@ -12,6 +12,9 @@ class BarangFragViewModel(application: Application): AndroidViewModel(applicatio
     private lateinit var sqLiteHelper: SQLiteHelper
 
     val resultBarangList = MutableLiveData<List<BarangDataClass>>()
+    val resultInsert = MutableLiveData<String>()
+    val resultUpdate = MutableLiveData<String>()
+    val resultDelete = MutableLiveData<String>()
 
     fun init(context: Context){
         sqLiteHelper = SQLiteHelper(context)
@@ -39,13 +42,15 @@ class BarangFragViewModel(application: Application): AndroidViewModel(applicatio
         val status = sqLiteHelper.insertBarang(data)
         if (status > -1){
             loadBarangList()
+            resultInsert.value = "success insert new barang"
         }else{
-
+            resultInsert.value = "failed insert new barang"
         }
     }
 
-    fun updateBarang(kdBarang: String, namaBarang: String, stockBarang: Int){
-        val data = BarangDataClass()
+    fun updateBarang(idBarang: Int, kdBarang: String, namaBarang: String, stockBarang: Int){
+        val data = Barang()
+        data.id_barang = idBarang
         data.kode_barang = kdBarang
         data.nama_barang = namaBarang
         data.stock = stockBarang
@@ -53,8 +58,19 @@ class BarangFragViewModel(application: Application): AndroidViewModel(applicatio
         val status = sqLiteHelper.updateBarang(data)
         if (status > -1){
             loadBarangList()
+            resultUpdate.value = "success update barang"
         }else{
+            resultUpdate.value = "failed update barang"
+        }
+    }
 
+    fun deleteBarang(idBarang: Int){
+        val status = sqLiteHelper.deleteBarang(idBarang)
+        if (status > -1){
+            loadBarangList()
+            resultDelete.value = "success delete barang"
+        }else{
+            resultDelete.value = "failed delete barang"
         }
     }
 }

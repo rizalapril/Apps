@@ -49,6 +49,8 @@ class BarangDialog(var context: Activity, val fragment: Fragment?, val width: In
 
     override fun initListener() {
         btnCancel?.setOnClickListener { v ->
+            val parent = fragment as BarangFragment
+            parent?.dismissDialog()
             dismiss()
         }
 
@@ -67,10 +69,11 @@ class BarangDialog(var context: Activity, val fragment: Fragment?, val width: In
                             if (data.nama_barang.equals(namaBarang) && data.stock.equals(stockBarang.toInt())){
                                 Toast.makeText(context, "Tidak ada perubahan data", Toast.LENGTH_SHORT).show()
                             }else{
-                                parent?.updateBarang(kdBarang, namaBarang, stockBarang.toInt())
+                                parent?.updateBarang(data.id_barang, kdBarang, namaBarang, stockBarang.toInt())
                             }
                         }
                     }
+                    parent?.dismissDialog()
                     dismiss()
                 }else{
                     Toast.makeText(context, "Stock harus angka", Toast.LENGTH_SHORT).show()

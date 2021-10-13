@@ -10,5 +10,6 @@
     <color name="color_white">#ffffff</color>
     <color name="bg_menu">#f78d20</color>
     <color name="color_tint">#B8B6B6</color>
+    <color name="color_black">#000000</color>
 
 </resources>

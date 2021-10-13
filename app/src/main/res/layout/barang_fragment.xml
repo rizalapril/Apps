@@ -42,7 +42,8 @@
             android:layout_marginLeft="20dp"
             app:layout_constraintLeft_toRightOf="@id/btnBackBarang"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/btnBackBarang" />
+            app:layout_constraintBottom_toBottomOf="@id/btnBackBarang"
+            android:fontFamily="@font/quicksand_regular"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/btnAddMainBarang"
@@ -72,4 +73,6 @@
         <include layout="@layout/layout_blank_barang_fragment"/>
         <include layout="@layout/layout_main_barang_fragment"/>
     </ViewFlipper>
+
+    <include layout="@layout/layout_dialog"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
