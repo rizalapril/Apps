@@ -34,7 +34,6 @@ class BarangViewModel(application: Application): AndroidViewModel(application) {
             }
         }
         resultBarangList.postValue(newList)
-
     }
 
     fun insertBarang(kdBarang: String, namaBarang: String, stockBarang: Int){

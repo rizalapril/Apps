@@ -15,7 +15,7 @@
         app:layout_constraintLeft_toLeftOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/btnBackBarang"
+            android:id="@+id/btnBackTransaksi"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@color/bg_menu"
@@ -37,16 +37,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Barang"
-            android:textSize="22sp"
+            android:text="Transaksi"
+            android:textSize="24sp"
             android:layout_marginLeft="20dp"
-            app:layout_constraintLeft_toRightOf="@id/btnBackBarang"
+            app:layout_constraintLeft_toRightOf="@id/btnBackTransaksi"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/btnBackBarang"
+            app:layout_constraintBottom_toBottomOf="@id/btnBackTransaksi"
             android:fontFamily="@font/quicksand_regular"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/btnAddMainBarang"
+            android:id="@+id/btnPendingOrder"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             app:layout_constraintWidth_percent="0.2"
@@ -55,7 +55,7 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:src="@drawable/baseline_add_black_24"
+                android:src="@drawable/baseline_pending_actions_black_24"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -65,13 +65,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ViewFlipper
-        android:id="@+id/vfBarangContent"
+        android:id="@+id/vfTransaksiContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@+id/headerBarang"
         app:layout_constraintBottom_toBottomOf="parent">
-        <include layout="@layout/layout_blank_barang"/>
-        <include layout="@layout/layout_main_barang"/>
+        <include layout="@layout/layout_blank_transaksi_frag"/>
+        <include layout="@layout/layout_main_transaksi_frag"/>
     </ViewFlipper>
 
     <include layout="@layout/layout_dialog"/>

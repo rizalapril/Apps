@@ -33,7 +33,7 @@ class BarangActivity : BaseActivity(){
 
     private var mLastClickTime: Long = 0
 
-    override fun getLayoutResourceId(): Int = R.layout.barang_fragment
+    override fun getLayoutResourceId(): Int = R.layout.activity_barang
 
     override fun initView(savedInstanceState: Bundle?) {
         viewModel = ViewModelProvider(this).get(BarangViewModel::class.java)

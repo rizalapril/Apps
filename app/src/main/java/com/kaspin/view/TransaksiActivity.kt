@@ -1,22 +1,31 @@
 package com.kaspin.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.kaspin.R
 import com.kaspin.base.BaseActivity
+import com.kaspin.view.fragment.TransaksiFragment
 
 class TransaksiActivity : BaseActivity(){
-    override fun getLayoutResourceId(): Int = R.layout.activity_transaksi
+    val transaksi = TransaksiFragment()
+
+    override fun getLayoutResourceId(): Int = R.layout.main_fragment
 
     override fun initView(savedInstanceState: Bundle?) {
-        TODO("Not yet implemented")
+
+        //default fragment
+        if (savedInstanceState == null) {
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.contentDetail, transaksi, "detail")
+                .commit()
+        }
     }
 
     override fun initListener() {
-        TODO("Not yet implemented")
+
     }
 
     override fun initObserver() {
-        TODO("Not yet implemented")
+
     }
 }

@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Beranda"
-            android:textSize="22sp"
+            android:textSize="24sp"
             android:layout_marginLeft="20dp"
             android:textColor="@color/color_white"
             app:layout_constraintLeft_toLeftOf="parent"

@@ -7,26 +7,17 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.kaspin.data.model.Barang
 import com.kaspin.data.model.BarangDataClass
+import com.kaspin.util.Constants
 import java.lang.Exception
 
-class SQLiteHelper(context: Context): SQLiteOpenHelper (context, DB_NAME, null, DB_VERSION){
-
-    companion object {
-        private const val DB_VERSION = 1
-        private const val DB_NAME = "kaspin.db"
-        private const val TBL_BARANG = "tbl_barang"
-        private const val _ID = "id_barang"
-        private const val _KDBARANG = "kode_barang "
-        private const val _NAMABARANG = "nama_barang"
-        private const val _QTY = "stock"
-    }
+class SQLiteHelper(context: Context): SQLiteOpenHelper (context, Constants.DB_NAME, null, Constants.DB_VERSION){
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val createTblBarang = "CREATE TABLE IF NOT EXISTS $TBL_BARANG (" +
-                "$_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "$_KDBARANG VARCHAR(50) UNIQUE, " +
-                "$_NAMABARANG VARCHAR(225) NOT NULL, " +
-                "$_QTY INTEGER NOT NULL" +
+        val createTblBarang = "CREATE TABLE IF NOT EXISTS $Constants.TBL_BARANG (" +
+                "$Constants._ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "$Constants._KDBARANG VARCHAR(50) UNIQUE, " +
+                "$Constants._NAMABARANG VARCHAR(225) NOT NULL, " +
+                "$Constants._QTY INTEGER NOT NULL" +
                 ")"
         db?.execSQL(createTblBarang)
     }
@@ -39,12 +30,12 @@ class SQLiteHelper(context: Context): SQLiteOpenHelper (context, DB_NAME, null, 
         val db = this.writableDatabase
 
         val contentValues = ContentValues()
-        contentValues.put(_ID, data.id_barang)
-        contentValues.put(_KDBARANG, data.kode_barang)
-        contentValues.put(_NAMABARANG, data.nama_barang)
-        contentValues.put(_QTY, data.stock)
+        contentValues.put(Constants._ID, data.id_barang)
+        contentValues.put(Constants._KDBARANG, data.kode_barang)
+        contentValues.put(Constants._NAMABARANG, data.nama_barang)
+        contentValues.put(Constants._QTY, data.stock)
 
-        val isSuccess = db.insert(TBL_BARANG, null, contentValues)
+        val isSuccess = db.insert(Constants.TBL_BARANG, null, contentValues)
         db.close()
         return isSuccess
     }
@@ -53,12 +44,12 @@ class SQLiteHelper(context: Context): SQLiteOpenHelper (context, DB_NAME, null, 
         val db = this.writableDatabase
 
         val contentValues = ContentValues()
-        contentValues.put(_ID, data.id_barang)
-        contentValues.put(_KDBARANG, data.kode_barang)
-        contentValues.put(_NAMABARANG, data.nama_barang)
-        contentValues.put(_QTY, data.stock)
+        contentValues.put(Constants._ID, data.id_barang)
+        contentValues.put(Constants._KDBARANG, data.kode_barang)
+        contentValues.put(Constants._NAMABARANG, data.nama_barang)
+        contentValues.put(Constants._QTY, data.stock)
 
-        val success = db.update(TBL_BARANG, contentValues, "id_barang=" + data.id_barang, null)
+        val success = db.update(Constants.TBL_BARANG, contentValues, "id_barang=" + data.id_barang, null)
         db.close()
         return success
     }
@@ -67,16 +58,16 @@ class SQLiteHelper(context: Context): SQLiteOpenHelper (context, DB_NAME, null, 
         val db = this.writableDatabase
 
         val contentValues = ContentValues()
-        contentValues.put(_ID, idBarang)
+        contentValues.put(Constants._ID, idBarang)
 
-        val success = db.delete(TBL_BARANG, "id_barang=" + idBarang, null)
+        val success = db.delete(Constants.TBL_BARANG, "id_barang=" + idBarang, null)
         db.close()
         return success
     }
 
     fun getAllBarang(): ArrayList<Barang>{
         val dataList: ArrayList<Barang> = ArrayList()
-        val _query = "SELECT * FROM ${TBL_BARANG}"
+        val _query = "SELECT * FROM ${Constants.TBL_BARANG}"
         val db = this.readableDatabase
 
         val cursor: Cursor?

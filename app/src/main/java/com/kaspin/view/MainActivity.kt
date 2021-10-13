@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.kaspin.R
 import com.kaspin.base.BaseActivity
-import com.kaspin.view.fragment.BarangFragment
 import com.kaspin.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -27,7 +26,7 @@ class MainActivity : BaseActivity() {
         }
 
         btnTransaksi.setOnClickListener { v ->
-            val intent = Intent(this, BarangActivity::class.java)
+            val intent = Intent(this, TransaksiActivity::class.java)
             startActivity(intent)
             finish()
         }

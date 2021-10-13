@@ -9,9 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/NoActionBarTheme">
-        <activity android:name=".view.TransaksiActivity"></activity>
-        <activity android:name=".view.BarangActivity"></activity>
-        <activity android:name=".view.MainActivity">
+        <activity android:name=".view.TransaksiActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.BarangActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,19 +1,16 @@
 package com.kaspin.view.dialog
 
 import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import com.kaspin.R
 import com.kaspin.base.BaseDialog
 import com.kaspin.data.model.BarangDataClass
 import com.kaspin.util.CommonUtil
 import com.kaspin.view.BarangActivity
-import com.kaspin.view.fragment.BarangFragment
 
 class BarangDialog(var context: Activity, val width: Int, val height: Int, val isEdit: Boolean, val data: BarangDataClass?): BaseDialog(context) {
 
