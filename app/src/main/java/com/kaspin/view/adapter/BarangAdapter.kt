@@ -11,11 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.kaspin.R
 import com.kaspin.data.model.BarangDataClass
+import com.kaspin.view.BarangActivity
 import com.kaspin.view.fragment.BarangFragment
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.barang_list_item.view.*
 
-class BarangAdapter(private val context: Context, val fragment: Fragment?): RecyclerView.Adapter<BarangAdapter.VH>() {
+class BarangAdapter(private val context: Activity): RecyclerView.Adapter<BarangAdapter.VH>() {
 
     private var listData: List<BarangDataClass>? = null
 
@@ -25,22 +26,7 @@ class BarangAdapter(private val context: Context, val fragment: Fragment?): Recy
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.bind(listData?.get(position)!!, fragment)
-//        val data = listData?.get(position)!!
-//
-//        holder.barangName.text = "${(data.nama_barang).capitalize()}"
-//        holder.kodeBarang.text = "${data.kode_barang}"
-//        holder.stockBarang.text = "Stock ${data.stock}"
-//
-//        holder.btnEdit.setOnClickListener { v ->
-//            barangParent = fragment as BarangFragment
-//            barangParent?.editBarang(data)
-//        }
-//
-//        holder.btnDelete.setOnClickListener { v ->
-//            barangParent = fragment as BarangFragment
-//            barangParent?.deleteBarang(data.kode_barang)
-//        }
+        holder.bind(listData?.get(position)!!, context)
     }
 
     override fun getItemCount(): Int {
@@ -49,7 +35,7 @@ class BarangAdapter(private val context: Context, val fragment: Fragment?): Recy
     }
 
     class VH(view: View): RecyclerView.ViewHolder(view){
-        private var barangParent: BarangFragment? = null
+        private var parent: Activity? = null
 
         val root = view.rootLayout
         val barangName = view.barangName
@@ -58,19 +44,19 @@ class BarangAdapter(private val context: Context, val fragment: Fragment?): Recy
         val btnEdit = view.editBarang
         val btnDelete = view.deleteBarang
 
-        fun bind(data: BarangDataClass, fragment: Fragment?){
+        fun bind(data: BarangDataClass, context: Activity){
             barangName.text = "${(data.nama_barang).capitalize()}"
             kodeBarang.text = "${data.kode_barang}"
             stockBarang.text = "Stock ${data.stock}"
 
             btnEdit.setOnClickListener { v ->
-                barangParent = fragment as BarangFragment
-                barangParent?.editBarang(data)
+                parent = context as BarangActivity
+                (parent as BarangActivity)?.editBarang(data)
             }
 
             btnDelete.setOnClickListener { v ->
-                barangParent = fragment as BarangFragment
-                barangParent?.deleteBarang(data.id_barang)
+                parent = context as BarangActivity
+                (parent as BarangActivity)?.deleteBarang(data.id_barang)
             }
         }
     }

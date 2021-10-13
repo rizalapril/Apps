@@ -12,9 +12,10 @@ import com.kaspin.R
 import com.kaspin.base.BaseDialog
 import com.kaspin.data.model.BarangDataClass
 import com.kaspin.util.CommonUtil
+import com.kaspin.view.BarangActivity
 import com.kaspin.view.fragment.BarangFragment
 
-class BarangDialog(var context: Activity, val fragment: Fragment?, val width: Int, val height: Int, val isEdit: Boolean, val data: BarangDataClass?): BaseDialog(context) {
+class BarangDialog(var context: Activity, val width: Int, val height: Int, val isEdit: Boolean, val data: BarangDataClass?): BaseDialog(context) {
 
     var kdBarang: EditText? = null
     var namaBarang: EditText? = null
@@ -23,6 +24,8 @@ class BarangDialog(var context: Activity, val fragment: Fragment?, val width: In
 
     var btnCancel: LinearLayout? = null
     var btnSave: LinearLayout? = null
+
+    var parent: Activity? = null
 
     override fun getLayoutResourceId(): Int = R.layout.barang_dialog
 
@@ -49,13 +52,13 @@ class BarangDialog(var context: Activity, val fragment: Fragment?, val width: In
 
     override fun initListener() {
         btnCancel?.setOnClickListener { v ->
-            val parent = fragment as BarangFragment
-            parent?.dismissDialog()
+            parent = context as BarangActivity
+            (parent as BarangActivity)?.dismissDialog()
             dismiss()
         }
 
         btnSave?.setOnClickListener {
-            val parent = fragment as BarangFragment
+            parent = context as BarangActivity
             var kdBarang = kdBarang?.text?.toString() ?: ""
             var namaBarang = namaBarang?.text?.toString() ?: ""
             var stockBarang = stockBarang?.text?.toString() ?: ""
@@ -63,17 +66,17 @@ class BarangDialog(var context: Activity, val fragment: Fragment?, val width: In
                 val isInt = CommonUtil.tryParseInt(stockBarang)
                 if (isInt){
                     if (!isEdit){
-                        parent?.addBarang(kdBarang, namaBarang, stockBarang.toInt())
+                        (parent as BarangActivity)?.addBarang(kdBarang, namaBarang, stockBarang.toInt())
                     }else{
                         data?.let {
                             if (data.nama_barang.equals(namaBarang) && data.stock.equals(stockBarang.toInt())){
                                 Toast.makeText(context, "Tidak ada perubahan data", Toast.LENGTH_SHORT).show()
                             }else{
-                                parent?.updateBarang(data.id_barang, kdBarang, namaBarang, stockBarang.toInt())
+                                (parent as BarangActivity)?.updateBarang(data.id_barang, kdBarang, namaBarang, stockBarang.toInt())
                             }
                         }
                     }
-                    parent?.dismissDialog()
+                    (parent as BarangActivity)?.dismissDialog()
                     dismiss()
                 }else{
                     Toast.makeText(context, "Stock harus angka", Toast.LENGTH_SHORT).show()
