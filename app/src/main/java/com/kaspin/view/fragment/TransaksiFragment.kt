@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kaspin.R
 import com.kaspin.base.BaseFragment
+import com.kaspin.data.model.BarangDataClass
 import com.kaspin.view.MainActivity
 import com.kaspin.view.adapter.TransaksiAdapter
 import com.kaspin.viewmodel.TransaksiFragViewModel
@@ -22,6 +23,7 @@ class TransaksiFragment : BaseFragment() {
     var vf: ViewFlipper? = null
     var btnBack: ConstraintLayout? = null
     var transaksiList: RecyclerView? = null
+    var btnOrder: ConstraintLayout? = null
 
     override fun getLayoutResourceId(): Int = R.layout.fragment_transaksi
 
@@ -30,6 +32,7 @@ class TransaksiFragment : BaseFragment() {
 
         vf = parent.findViewById(R.id.vfTransaksiContent)
         btnBack = parent.findViewById(R.id.btnBackTransaksi)
+        btnOrder = parent.findViewById(R.id.btnPendingOrder)
         transaksiList = parent.findViewById(R.id.transaksiRecycleView)
         transaksiList?.layoutManager = LinearLayoutManager(activity as Context)
 
@@ -38,9 +41,15 @@ class TransaksiFragment : BaseFragment() {
 
         viewModel.init(activity as Context)
         viewModel.loadBarangList()
+        viewModel.createParentTransaksi()
+        viewModel.checkPref()
     }
 
     override fun initListener() {
+        btnOrder?.setOnClickListener { v ->
+
+        }
+
         btnBack?.setOnClickListener { v ->
             val intent = Intent(activity, MainActivity::class.java)
             startActivity(intent)
@@ -60,5 +69,9 @@ class TransaksiFragment : BaseFragment() {
                 }
             }
         })
+    }
+
+    fun addToCart(data: BarangDataClass){
+
     }
 }

@@ -13,4 +13,8 @@ object CommonUtil {
         }
 
     }
+
+    fun generateHeader(headerName : String): String {
+        return "${headerName}_${System.currentTimeMillis()}"
+    }
 }
