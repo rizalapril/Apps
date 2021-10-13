@@ -42,7 +42,6 @@ class TransaksiFragment : BaseFragment() {
         viewModel.init(activity as Context)
         viewModel.loadBarangList()
         viewModel.createParentTransaksi()
-        viewModel.checkPref()
     }
 
     override fun initListener() {
@@ -72,6 +71,6 @@ class TransaksiFragment : BaseFragment() {
     }
 
     fun addToCart(data: BarangDataClass){
-
+        viewModel.addToCart(data)
     }
 }

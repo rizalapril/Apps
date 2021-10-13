@@ -22,7 +22,7 @@ class Constants {
 
         //tbl detail transaksi field
         val _ID_BARANG = "id_barang"
-        val _KD_BARANG = "kode_barang "
+        val _KD_BARANG = "kode_barang"
         val _NAMA_BARANG = "nama_barang"
         val _QTY_ = "stock"
 

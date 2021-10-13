@@ -5,10 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.kaspin.data.model.Barang
-import com.kaspin.data.model.BarangDataClass
-import com.kaspin.data.model.HeaderTransaksi
-import com.kaspin.data.model.HeaderTransaksiDataClass
+import com.kaspin.data.model.*
 import com.kaspin.util.Constants
 import java.lang.Exception
 
@@ -165,6 +162,69 @@ class SQLiteHelper(context: Context): SQLiteOpenHelper (context, Constants.DB_NA
         val isSuccess = db.insert(Constants.TBL_TRANSAKSI, null, contentValues)
         db.close()
         return isSuccess
+    }
+
+    fun insertDetailTransaksi(data: DetailTransaksiDataClass): Long{
+        val db = this.writableDatabase
+
+        val contentValues = ContentValues()
+        contentValues.put(Constants._ID_DETAIL_TRANSAKSI, data.id_detail_transaksi)
+        contentValues.put(Constants._ID_BARANG, data.id_barang)
+        contentValues.put(Constants._KD_BARANG, data.kode_barang)
+        contentValues.put(Constants._NAMA_BARANG, data.nama_barang)
+        contentValues.put(Constants._QTY_, data.stock)
+
+        val isSuccess = db.insert(Constants.TBL_DETAIL_TRANSAKSI, null, contentValues)
+        db.close()
+        return isSuccess
+    }
+
+    fun updateDetailTransaksi(data: DetailTransaksiDataClass): Int{
+        val db = this.writableDatabase
+
+        val contentValues = ContentValues()
+        contentValues.put(Constants._ID_DETAIL_TRANSAKSI, data.id_detail_transaksi)
+        contentValues.put(Constants._ID_BARANG, data.id_barang)
+        contentValues.put(Constants._KD_BARANG, data.kode_barang)
+        contentValues.put(Constants._NAMA_BARANG, data.nama_barang)
+        contentValues.put(Constants._QTY_, data.stock)
+
+        val success = db.update(Constants.TBL_DETAIL_TRANSAKSI, contentValues, "id_detail_transaksi="+ data.id_detail_transaksi+" AND id_barang=" + data.id_barang, null)
+        db.close()
+        return success
+    }
+
+    fun getDetailTransaksi(idDetailTransaksi: String, idBarang: Int): DetailTransaksi{
+        var data_ = DetailTransaksi()
+        val _query = "SELECT * FROM ${Constants.TBL_DETAIL_TRANSAKSI} WHERE id_detail_transaksi=${idDetailTransaksi} AND id_barang=${idBarang}"
+        val db = this.readableDatabase
+
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(_query, null)
+        }catch (e: Exception){
+            e.printStackTrace()
+            db.execSQL(_query)
+            return DetailTransaksi()
+        }
+
+        var dataClass = DetailTransaksiDataClass()
+
+        cursor?.let {
+            if (cursor.moveToFirst()){
+                dataClass.id_detail_transaksi = cursor.getString(cursor.getColumnIndex("id_detail_transaksi"))
+                dataClass.id_barang = cursor.getInt(cursor.getColumnIndex("id_barang"))
+                dataClass.kode_barang = cursor.getString(cursor.getColumnIndex("kode_barang"))
+                dataClass.nama_barang = cursor.getString(cursor.getColumnIndex("nama_barang"))
+                dataClass.stock = cursor.getInt(cursor.getColumnIndex("stock"))
+
+                val data = DetailTransaksi(dataClass.id_detail_transaksi, dataClass.id_barang, dataClass.kode_barang, dataClass.nama_barang, dataClass.stock)
+                data_ = data
+            }
+        }
+
+        return data_
     }
 
     fun getLastRecordTransaksiHeader(): HeaderTransaksi{

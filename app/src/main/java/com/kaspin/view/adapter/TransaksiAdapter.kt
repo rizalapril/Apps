@@ -44,8 +44,8 @@ class TransaksiAdapter(private val context: Context, val fragment: Fragment?): R
             kodeBarang.text = "${data.kode_barang}"
 
             btnAddToCart.setOnClickListener { v ->
-//                parent = fragment as TransaksiFragment
-//                parent?.addToCard(data)
+                parent = fragment as TransaksiFragment
+                parent?.addToCart(data)
             }
         }
     }

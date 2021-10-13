@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.kaspin.data.model.Barang
 import com.kaspin.data.model.BarangDataClass
+import com.kaspin.data.model.DetailTransaksiDataClass
 import com.kaspin.data.model.HeaderTransaksiDataClass
 import com.kaspin.helper.SQLiteHelper
 import com.kaspin.util.CommonUtil
@@ -70,7 +72,30 @@ class TransaksiFragViewModel(application: Application): AndroidViewModel(applica
         }
     }
 
-    fun addToCart(){
-
+    fun addToCart(data: BarangDataClass){
+        val id_detail_transaksi = sharedPref.getString(Constants.PREF_ID_DETAIL_TRANSAKSI)
+        //check isHas
+        val detailTransaksi = sqLiteHelper.getDetailTransaksi(id_detail_transaksi, data.id_barang)
+        if (detailTransaksi.id_detail_transaksi.isNullOrEmpty()){
+            //insert
+            val data = DetailTransaksiDataClass(id_detail_transaksi, data.id_barang, data.kode_barang, data.nama_barang, 1)
+            val status = sqLiteHelper.insertDetailTransaksi(data)
+            if (status > -1){
+//                loadBarangList()
+//            resultInsert.value = "success insert new barang"
+            }else{
+//            resultInsert.value = "failed insert new barang"
+            }
+        }else{
+            //update
+            val data = DetailTransaksiDataClass(id_detail_transaksi, data.id_barang, data.kode_barang, data.nama_barang, detailTransaksi.stock + 1)
+            val status = sqLiteHelper.updateDetailTransaksi(data)
+            if (status > -1){
+//                loadBarangList()
+//            resultInsert.value = "success insert new barang"
+            }else{
+//            resultInsert.value = "failed insert new barang"
+            }
+        }
     }
 }
