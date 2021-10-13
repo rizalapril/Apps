@@ -103,9 +103,6 @@ class TransaksiFragViewModel(application: Application): AndroidViewModel(applica
         val id_detail_transaksi = sharedPref.getString(Constants.PREF_ID_DETAIL_TRANSAKSI)
 
         val detailTransaksi = sqLiteHelper.getAllCheckout(id_detail_transaksi)
-        if (detailTransaksi.size > 0){
-
-        }
         resultCheckoutBtn.value = detailTransaksi.size
     }
 }

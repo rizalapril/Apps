@@ -15,9 +15,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kaspin.R
 import com.kaspin.base.BaseFragment
 import com.kaspin.data.model.BarangDataClass
+import com.kaspin.data.network.Checkout
 import com.kaspin.view.MainActivity
 import com.kaspin.view.adapter.TransaksiAdapter
 import com.kaspin.viewmodel.TransaksiFragViewModel
+import org.greenrobot.eventbus.EventBus
 
 class TransaksiFragment : BaseFragment() {
     private lateinit var transaksiAdapter: TransaksiAdapter
@@ -58,6 +60,12 @@ class TransaksiFragment : BaseFragment() {
     override fun initListener() {
         btnOrder?.setOnClickListener { v ->
 
+        }
+
+        btnCheckout?.setOnClickListener { v ->
+            var data = Checkout()
+            data.isOpen = true
+            EventBus.getDefault().post(data)
         }
 
         btnBack?.setOnClickListener { v ->

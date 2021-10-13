@@ -293,4 +293,16 @@ class SQLiteHelper(context: Context): SQLiteOpenHelper (context, Constants.DB_NA
 
         return dataList
     }
+
+    //checkout
+    fun deleteCheckout(idDetailTransaksi: String, idBarang: Int): Int{
+        val db = this.writableDatabase
+
+        val contentValues = ContentValues()
+        contentValues.put(Constants._ID, idBarang)
+
+        val success = db.delete(Constants.TBL_DETAIL_TRANSAKSI, "id_detail_transaksi="+ idDetailTransaksi+" AND id_barang=" + idBarang, null)
+        db.close()
+        return success
+    }
 }

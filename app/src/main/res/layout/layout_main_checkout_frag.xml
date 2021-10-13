@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/transaksiRecycleView"
+        android:id="@+id/checkoutRecycleView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,14 +22,15 @@
             android:layout_height="1dp"
             android:background="@color/color_border"
             app:layout_constraintTop_toTopOf="parent"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/btnCheckout"
+            android:id="@+id/btnSaveOrder"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             app:layout_constraintWidth_percent="0.4"
-            app:layout_constraintRight_toRightOf="parent">
+            app:layout_constraintLeft_toLeftOf="parent">
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/btnCheckoutLayout"
+                android:id="@+id/btnSaveOrderLayout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintHeight_percent="0.5"
@@ -46,28 +47,54 @@
                     android:orientation="horizontal"
                     android:gravity="center">
                     <TextView
-                        android:id="@+id/txtTitleCheckout"
+                        android:id="@+id/txtTitleSaveOrder"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toLeftOf="@+id/imgCheckout"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:text="Checkout (0)"
+                        android:text="Save Order"
                         android:textSize="14sp"
                         android:fontFamily="@font/quicksand_regular"
                         android:textColor="@color/color_white"/>
-                    <ImageView
-                        android:id="@+id/imgCheckout"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btnSubmit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintWidth_percent="0.4"
+            app:layout_constraintRight_toRightOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/btnSubmitLayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.5"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@drawable/bg_round_dialog"
+                android:backgroundTint="@color/color_tint"
+                android:layout_margin="5dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/txtTitleSubmit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toRightOf="@+id/txtTitle"
-                        android:src="@drawable/baseline_shopping_cart_black_24"
-                        android:tint="@color/color_white"
-                        android:layout_marginLeft="10dp"/>
+                        android:text="Submit"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/quicksand_regular"
+                        android:textColor="@color/color_white"/>
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
