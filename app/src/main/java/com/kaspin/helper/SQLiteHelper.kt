@@ -70,6 +70,17 @@ class SQLiteHelper(context: Context): SQLiteOpenHelper (context, Constants.DB_NA
         return success
     }
 
+    fun updateStockBarang(idBarang: Int, stock: Int): Int{
+        val db = this.writableDatabase
+
+        val contentValues = ContentValues()
+        contentValues.put(Constants._QTY, stock)
+
+        val success = db.update(Constants.TBL_BARANG, contentValues, "id_barang=" + idBarang, null)
+        db.close()
+        return success
+    }
+
     fun deleteBarang(idBarang: Int): Int{
         val db = this.writableDatabase
 
@@ -79,6 +90,40 @@ class SQLiteHelper(context: Context): SQLiteOpenHelper (context, Constants.DB_NA
         val success = db.delete(Constants.TBL_BARANG, "id_barang=" + idBarang, null)
         db.close()
         return success
+    }
+
+    fun getBarang(idBarang: Int): BarangDataClass{
+        var data = BarangDataClass()
+        val _query = "SELECT * FROM ${Constants.TBL_BARANG} WHERE id_barang=" + idBarang + ""
+        val db = this.readableDatabase
+
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(_query, null)
+        }catch (e: Exception){
+            e.printStackTrace()
+            db.execSQL(_query)
+            return BarangDataClass()
+        }
+
+        var dataClass = BarangDataClass()
+
+        cursor?.let {
+            if (cursor.moveToFirst()){
+                do {
+                    dataClass.id_barang = cursor.getInt(cursor.getColumnIndex("id_barang"))
+                    dataClass.kode_barang = cursor.getString(cursor.getColumnIndex("kode_barang"))
+                    dataClass.nama_barang = cursor.getString(cursor.getColumnIndex("nama_barang"))
+                    dataClass.stock = cursor.getInt(cursor.getColumnIndex("stock"))
+
+                    val data_ = BarangDataClass(dataClass.id_barang, dataClass.kode_barang, dataClass.nama_barang, dataClass.stock)
+                    data = data_
+                }while (cursor.moveToNext())
+            }
+        }
+
+        return data
     }
 
     fun getAllBarang(): ArrayList<Barang>{
@@ -162,6 +207,20 @@ class SQLiteHelper(context: Context): SQLiteOpenHelper (context, Constants.DB_NA
         val isSuccess = db.insert(Constants.TBL_TRANSAKSI, null, contentValues)
         db.close()
         return isSuccess
+    }
+
+    fun updateHeaderTransaksi(data: HeaderTransaksiDataClass): Int{
+        val db = this.writableDatabase
+
+        val contentValues = ContentValues()
+        contentValues.put(Constants._ID_TRANSAKSI, data.id_transaksi)
+        contentValues.put(Constants._ID_DETAIL_TRANSAKSI, data.id_detail_transaksi)
+        contentValues.put(Constants._NAMA_TRANSAKSI, data.nama_transaksi)
+        contentValues.put(Constants._STATUS_TRANSAKSI, data.status)
+
+        val success = db.update(Constants.TBL_TRANSAKSI, contentValues, "id_detail_transaksi="+ data.id_detail_transaksi+"", null)
+        db.close()
+        return success
     }
 
     fun insertDetailTransaksi(data: DetailTransaksiDataClass): Long{
@@ -259,6 +318,38 @@ class SQLiteHelper(context: Context): SQLiteOpenHelper (context, Constants.DB_NA
         return data_
     }
 
+    fun getTransaksiHeader(idDetailTransaksi: String): HeaderTransaksi{
+        var data_ = HeaderTransaksi()
+        val _query = "SELECT * FROM ${Constants.TBL_TRANSAKSI} WHERE id_detail_transaksi="+idDetailTransaksi+""
+        val db = this.readableDatabase
+
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(_query, null)
+        }catch (e: Exception){
+            e.printStackTrace()
+            db.execSQL(_query)
+            return HeaderTransaksi()
+        }
+
+        var dataClass = HeaderTransaksiDataClass()
+
+        cursor?.let {
+            if (cursor.moveToFirst()){
+                dataClass.id_transaksi = cursor.getInt(cursor.getColumnIndex("id_transaksi"))
+                dataClass.id_detail_transaksi = cursor.getString(cursor.getColumnIndex("id_detail_transaksi"))
+                dataClass.nama_transaksi = cursor.getString(cursor.getColumnIndex("nama_transaksi"))
+                dataClass.status = cursor.getInt(cursor.getColumnIndex("status"))
+
+                val data = HeaderTransaksi(dataClass.id_transaksi, dataClass.id_detail_transaksi, dataClass.nama_transaksi, dataClass.status)
+                data_ = data
+            }
+        }
+
+        return data_
+    }
+
     fun getAllCheckout(idDetailTransaksi: String): ArrayList<DetailTransaksi>{
         val dataList: ArrayList<DetailTransaksi> = ArrayList()
         val _query = "SELECT * FROM ${Constants.TBL_DETAIL_TRANSAKSI} WHERE id_detail_transaksi = ${idDetailTransaksi}"
@@ -305,4 +396,5 @@ class SQLiteHelper(context: Context): SQLiteOpenHelper (context, Constants.DB_NA
         db.close()
         return success
     }
+
 }

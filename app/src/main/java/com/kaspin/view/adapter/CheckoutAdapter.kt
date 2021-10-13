@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.kaspin.R
@@ -38,6 +39,7 @@ class CheckoutAdapter(private val context: Context, val fragment: Fragment?): Re
         val barangName = view.barangName
         val kodeBarang = view.kodeBarang
         val qtyBarang = view.stockBarang
+        val txtInfo = view.infoStock
         val deleteBtn = view.deleteFromCheckout
 
         fun bind(data: DetailTransaksiDataClass, context: Context, fragment: Fragment?){
@@ -48,6 +50,14 @@ class CheckoutAdapter(private val context: Context, val fragment: Fragment?): Re
             deleteBtn.setOnClickListener { v ->
                 parent = fragment as CheckoutFragment
                 parent?.deleteFromCheckout(data)
+            }
+
+            if (data.flag){
+                txtInfo.visibility = View.VISIBLE
+                root.setBackgroundTintList(ContextCompat.getColorStateList(context.applicationContext, R.color.color_red))
+            }else{
+                txtInfo.visibility = View.GONE
+                root.setBackgroundTintList(ContextCompat.getColorStateList(context.applicationContext, R.color.color_white))
             }
         }
     }

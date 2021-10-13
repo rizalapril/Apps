@@ -14,4 +14,5 @@ data class DetailTransaksiDataClass(var id_detail_transaksi: String = "",
                                     var id_barang: Int = 0,
                                     var kode_barang: String = "",
                                     var nama_barang: String = "",
-                                    var stock: Int = 0)
+                                    var stock: Int = 0,
+                                    var flag: Boolean = false)

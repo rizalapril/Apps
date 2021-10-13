@@ -1,11 +1,15 @@
 package com.kaspin.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import com.kaspin.R
 import com.kaspin.base.BaseActivity
 import com.kaspin.data.network.Checkout
+import com.kaspin.data.network.Home
+import com.kaspin.data.network.TransaksiSuccess
 import com.kaspin.view.fragment.CheckoutFragment
+import com.kaspin.view.fragment.SuccessFragment
 import com.kaspin.view.fragment.TransaksiFragment
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -13,6 +17,7 @@ import org.greenrobot.eventbus.Subscribe
 class TransaksiActivity : BaseActivity(){
     val transaksi = TransaksiFragment()
     val checkout = CheckoutFragment()
+    val success = SuccessFragment()
 
     override fun getLayoutResourceId(): Int = R.layout.main_fragment
 
@@ -61,4 +66,25 @@ class TransaksiActivity : BaseActivity(){
                 .commit()
         }
     }
+
+    @Subscribe
+    public fun onCheckout(data: TransaksiSuccess) {
+        if(data.isOpen){
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.contentDetail, success, "success")
+                .commit()
+        }
+    }
+
+    @Subscribe
+    public fun onCheckout(data: Home) {
+        if(!data.isHome){
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.contentDetail, transaksi, "transaksi")
+                .commit()
+        }
+    }
+
 }
