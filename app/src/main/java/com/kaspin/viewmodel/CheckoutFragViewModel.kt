@@ -20,6 +20,7 @@ class CheckoutFragViewModel(application: Application): AndroidViewModel(applicat
 
     val resultCheckoutList = MutableLiveData<List<DetailTransaksiDataClass>>()
     val resultCheckoutSubmit = MutableLiveData<Boolean>()
+    val resultCheckoutFirebaseSubmit = MutableLiveData<Boolean>()
     val resultSubmit = MutableLiveData<Boolean>()
 
     var flag = false
@@ -83,6 +84,7 @@ class CheckoutFragViewModel(application: Application): AndroidViewModel(applicat
                     }
                     newList.add(newData)
                 }
+                resultCheckoutFirebaseSubmit.value = flag
             }
         }
         resultCheckoutList.value = newList

@@ -1,11 +1,13 @@
 package com.kaspin.view.fragment
 
+import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.widget.Toast
 import android.widget.ViewFlipper
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +19,8 @@ import com.kaspin.data.model.HeaderOrderFirebaseDataClass
 import com.kaspin.data.network.Checkout
 import com.kaspin.data.network.TransaksiSuccess
 import com.kaspin.view.adapter.CheckoutAdapter
+import com.kaspin.view.dialog.BarangDialog
+import com.kaspin.view.dialog.NotifDialog
 import com.kaspin.viewmodel.CheckoutFragViewModel
 import org.greenrobot.eventbus.EventBus
 
@@ -31,6 +35,9 @@ class CheckoutFragment : BaseFragment() {
     var btnSaveOrder: ConstraintLayout? = null
     var btnSaveOrderLayout: ConstraintLayout? = null
     var checkoutList: RecyclerView? = null
+    var layoutDialog: ConstraintLayout? = null
+
+    var notifDialog: NotifDialog? = null
 
     var isLoadFromFirebase = false
     var dataFromFirebase: HeaderOrderFirebaseDataClass? = null
@@ -46,8 +53,12 @@ class CheckoutFragment : BaseFragment() {
         btnSubmitLayout = parent.findViewById(R.id.btnSubmitLayout)
         btnSaveOrder = parent.findViewById(R.id.btnSaveOrder)
         btnSaveOrderLayout = parent.findViewById(R.id.btnSaveOrderLayout)
+        layoutDialog = parent.findViewById(R.id.layoutDialog)
         checkoutList = parent.findViewById(R.id.checkoutRecycleView)
         checkoutList?.layoutManager = LinearLayoutManager(activity as Context)
+
+        notifDialog = NotifDialog(activity as Activity, this as Fragment, (width * 0.8).toInt(), (height * 0.4).toInt())
+        notifDialog?.setCancelable(false)
 
         checkoutAdapter = CheckoutAdapter(activity as Context, this)
         checkoutList?.adapter = checkoutAdapter
@@ -67,7 +78,9 @@ class CheckoutFragment : BaseFragment() {
                 data.isOpen = false
                 EventBus.getDefault().post(data)
             }else{
-                showNotification("Anda yakin untuk kembali? Anda belum submit, Data dari firebase akan hilang.")
+                notifDialog?.show()
+                notifDialog?.setTextNotif("Anda saat ini sedang menggunakan data dari firebase.\nData akan hilang jika anda kembali.\nApakah anda yakin?")
+                layoutDialog?.visibility = View.VISIBLE
             }
         }
 
@@ -124,6 +137,21 @@ class CheckoutFragment : BaseFragment() {
                 }
             }
         })
+
+        viewModel.resultCheckoutFirebaseSubmit.observe(this, Observer { result ->
+            result?.let {
+                if (it){
+                    activity?.let { actvy ->
+                        btnSubmitLayout?.setBackgroundTintList(ContextCompat.getColorStateList(actvy.applicationContext, R.color.color_tint))
+                        btnSaveOrderLayout?.setBackgroundTintList(ContextCompat.getColorStateList(actvy.applicationContext, R.color.color_tint))
+                    }
+                }else{
+                    activity?.let { actvy ->
+                        btnSubmitLayout?.setBackgroundTintList(ContextCompat.getColorStateList(actvy.applicationContext, R.color.color_green))
+                    }
+                }
+            }
+        })
     }
 
     fun deleteFromCheckout(data: DetailTransaksiDataClass){
@@ -132,5 +160,18 @@ class CheckoutFragment : BaseFragment() {
 
     fun showNotification(text: String){
         Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
+    }
+
+    fun cancelBtnDialog(){
+        layoutDialog?.visibility = View.GONE
+    }
+
+    fun confirmBtnDialog(){
+        layoutDialog?.visibility = View.GONE
+        isLoadFromFirebase = false
+        
+        var data = Checkout()
+        data.isOpen = false
+        EventBus.getDefault().post(data)
     }
 }

@@ -61,27 +61,27 @@ class BarangDialog(var context: Activity, val width: Int, val height: Int, val i
             var stockBarang = stockBarang?.text?.toString() ?: ""
 
             if (!namaBarang.isNullOrBlank()){
-
-            }
-
-            if (!namaBarang.isNullOrBlank() || !kdBarang.isNullOrEmpty() || !stockBarang.isNullOrEmpty()){
-                val isInt = CommonUtil.tryParseInt(stockBarang)
-                if (isInt){
-                    if (!isEdit){
-                        (parent as BarangActivity)?.addBarang(kdBarang, namaBarang, stockBarang.toInt())
-                    }else{
-                        data?.let {
-                            if (data.nama_barang.equals(namaBarang) && data.stock.equals(stockBarang.toInt())){
-                                Toast.makeText(context, "Tidak ada perubahan data", Toast.LENGTH_SHORT).show()
-                            }else{
-                                (parent as BarangActivity)?.updateBarang(data.id_barang, kdBarang,  namaBarang, stockBarang.toInt())
+                if (!kdBarang.isNullOrEmpty() || !stockBarang.isNullOrEmpty()){
+                    val isInt = CommonUtil.tryParseInt(stockBarang)
+                    if (isInt){
+                        if (!isEdit){
+                            (parent as BarangActivity)?.addBarang(kdBarang, namaBarang, stockBarang.toInt())
+                        }else{
+                            data?.let {
+                                if (data.nama_barang.equals(namaBarang) && data.stock.equals(stockBarang.toInt())){
+                                    Toast.makeText(context, "Tidak ada perubahan data", Toast.LENGTH_SHORT).show()
+                                }else{
+                                    (parent as BarangActivity)?.updateBarang(data.id_barang, kdBarang,  namaBarang, stockBarang.toInt())
+                                }
                             }
                         }
+                        (parent as BarangActivity)?.dismissDialog()
+                        dismiss()
+                    }else{
+                        Toast.makeText(context, "Stock harus angka", Toast.LENGTH_SHORT).show()
                     }
-                    (parent as BarangActivity)?.dismissDialog()
-                    dismiss()
                 }else{
-                    Toast.makeText(context, "Stock harus angka", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Mohon periksa kembali inputan", Toast.LENGTH_SHORT).show()
                 }
             }else{
                 Toast.makeText(context, "Mohon periksa kembali inputan", Toast.LENGTH_SHORT).show()

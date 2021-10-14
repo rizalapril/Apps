@@ -9,15 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/layoutAcceptBtn"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="10dp">
         <TextView
+            android:id="@+id/txtInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:text="Anda saat ini sedang menggunakan data dari firebase.\nData akan hilang jika anda kembali.\nApakah anda yakin?"
+            android:text=""
+            android:textSize="18sp"
             android:fontFamily="@font/quicksand_regular"
             android:gravity="center"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -35,7 +38,7 @@
         android:weightSum="2"
         android:orientation="horizontal">
         <LinearLayout
-            android:id="@+id/btnCancelBarangDialog"
+            android:id="@+id/btnCancelDialog"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -53,7 +56,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/btnSaveBarangDialog"
+            android:id="@+id/btnConfirmDialog"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
