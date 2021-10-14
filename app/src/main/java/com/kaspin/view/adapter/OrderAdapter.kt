@@ -44,7 +44,12 @@ class OrderAdapter(private val context: Context, val fragment: Fragment?): Recyc
 
             btnDelete.setOnClickListener { v ->
                 parent = fragment as OrderFragment
-//                parent?.addToCart(data)
+                parent?.deleteOrder(data)
+            }
+
+            btnLoad.setOnClickListener { v ->
+                parent = fragment as OrderFragment
+                parent?.loadOrder(data)
             }
         }
     }

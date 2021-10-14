@@ -17,7 +17,8 @@ data class DetailTransaksiDataClass(var id_detail_transaksi: String = "",
                                     var stock: Int = 0,
                                     var flag: Boolean = false)
 
-data class HeaderOrderFirebaseDataClass(var id_transaksi: Int? = 0,
+data class HeaderOrderFirebaseDataClass(var id: String = "",
+                                        var id_transaksi: Int? = 0,
                                     var id_detail_transaksi: String = "",
                                     var nama_transaksi: String = "",
                                     var status: Int = 0,

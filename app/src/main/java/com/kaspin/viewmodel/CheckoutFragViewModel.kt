@@ -28,7 +28,7 @@ class CheckoutFragViewModel(application: Application): AndroidViewModel(applicat
         sqLiteHelper = SQLiteHelper(context)
         sharedPref = SharedPreferenceUtil(context)
         dbFirebase = FirebaseDatabase.getInstance()
-        referance = dbFirebase.getReference("HeaderTransaksi")
+        referance = dbFirebase.getReference("Transaksi")
     }
 
     fun loadCheckoutList(){
@@ -113,6 +113,7 @@ class CheckoutFragViewModel(application: Application): AndroidViewModel(applicat
 
         if (dataCheckout.size > 0){
             val header = sqLiteHelper.getTransaksiHeader(id_detail_transaksi)
+            val headerId = referance.push().key
 
             var data = HeaderOrderFirebaseDataClass()
             var arrList = ArrayList<DetailOrderFirebaseDataClass>()
@@ -126,14 +127,19 @@ class CheckoutFragViewModel(application: Application): AndroidViewModel(applicat
                 detail.stock = i.stock
                 arrList.add(detail)
             }
+            data.id = headerId ?: ""
             data.id_transaksi = header.id_transaksi
             data.id_detail_transaksi = header.id_detail_transaksi
             data.nama_transaksi = header.nama_transaksi
             data.status = 2
             data.detail_order = arrList
 
-            val idHeader = referance.push().key
-            referance.child(idHeader?: "").setValue(data)
+            if (headerId != null){
+                referance.child(headerId).setValue(data).addOnCompleteListener { v ->
+                    Log.i("CheckoutFrag","Success save order into firebase")
+                }
+            }
+//            referance.child(headerId?: "").setValue(data)
         }
     }
 }

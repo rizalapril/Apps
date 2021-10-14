@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kaspin.R
 import com.kaspin.base.BaseFragment
+import com.kaspin.data.model.HeaderOrderFirebaseDataClass
+import com.kaspin.data.network.LoadOrder
 import com.kaspin.data.network.Order
 import com.kaspin.view.adapter.OrderAdapter
 import com.kaspin.view.adapter.TransaksiAdapter
@@ -32,6 +34,7 @@ class OrderFragment : BaseFragment() {
         vf = parent.findViewById(R.id.vfOrderContent)
         btnBack = parent.findViewById(R.id.btnBackOrder)
         orderList = parent.findViewById(R.id.orderRecycleView)
+
 
         orderList?.layoutManager = LinearLayoutManager(activity as Context)
         orderAdapter = OrderAdapter(activity as Context, this)
@@ -61,5 +64,16 @@ class OrderFragment : BaseFragment() {
                 }
             }
         })
+    }
+
+    fun loadOrder(data: HeaderOrderFirebaseDataClass){
+        var event = LoadOrder()
+        event.isLoad = true
+        event.data = data
+        EventBus.getDefault().post(event)
+    }
+
+    fun deleteOrder(data: HeaderOrderFirebaseDataClass){
+        viewModel.deleteOrder(data)
     }
 }

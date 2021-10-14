@@ -21,7 +21,7 @@ class OrderFragViewModel(application: Application): AndroidViewModel(application
     fun init(context: Context){
         sqLiteHelper = SQLiteHelper(context)
         dbFirebase = FirebaseDatabase.getInstance()
-        referance = dbFirebase.getReference("HeaderTransaksi")
+        referance = dbFirebase.getReference("Transaksi")
     }
 
     fun loadData(){
@@ -33,15 +33,18 @@ class OrderFragViewModel(application: Application): AndroidViewModel(application
                     dataList.add(data as HeaderOrderFirebaseDataClass)
                 }
 
-                if (dataList.size > 0){
-                    resultOrderList.postValue(dataList)
-                }
+                resultOrderList.postValue(dataList)
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.e("cancel","${error}")
             }
         })
+    }
+
+    fun deleteOrder(data: HeaderOrderFirebaseDataClass){
+        val deleteData = referance.child(data.id)
+        deleteData.removeValue()
     }
 
 }
