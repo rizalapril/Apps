@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kaspin.R
 import com.kaspin.base.BaseFragment
 import com.kaspin.data.model.DetailTransaksiDataClass
+import com.kaspin.data.model.HeaderOrderFirebaseDataClass
 import com.kaspin.data.network.Checkout
 import com.kaspin.data.network.TransaksiSuccess
 import com.kaspin.view.adapter.CheckoutAdapter
@@ -30,6 +31,9 @@ class CheckoutFragment : BaseFragment() {
     var btnSaveOrder: ConstraintLayout? = null
     var btnSaveOrderLayout: ConstraintLayout? = null
     var checkoutList: RecyclerView? = null
+
+    var isLoadFromFirebase = false
+    var dataFromFirebase: HeaderOrderFirebaseDataClass? = null
 
     override fun getLayoutResourceId(): Int = R.layout.fragment_checkout
 
@@ -49,14 +53,22 @@ class CheckoutFragment : BaseFragment() {
         checkoutList?.adapter = checkoutAdapter
 
         viewModel.init(activity as Context)
-        viewModel.loadCheckoutList()
+        if (!isLoadFromFirebase){
+            viewModel.loadCheckoutList()
+        }else{
+            viewModel.loadFromFirebase(dataFromFirebase)
+        }
     }
 
     override fun initListener() {
         btnBack?.setOnClickListener { v ->
-            var data = Checkout()
-            data.isOpen = false
-            EventBus.getDefault().post(data)
+            if (!isLoadFromFirebase){
+                var data = Checkout()
+                data.isOpen = false
+                EventBus.getDefault().post(data)
+            }else{
+                showNotification("Anda yakin untuk kembali? Anda belum submit, Data dari firebase akan hilang.")
+            }
         }
 
         btnSubmit?.setOnClickListener { v ->
@@ -64,7 +76,11 @@ class CheckoutFragment : BaseFragment() {
         }
 
         btnSaveOrder?.setOnClickListener { v ->
-            viewModel.saveOrder()
+            if (!isLoadFromFirebase){
+                viewModel.saveOrder()
+            }else{
+                showNotification("Data sudah tersimpan di firebase sebelumnya.")
+            }
         }
     }
 

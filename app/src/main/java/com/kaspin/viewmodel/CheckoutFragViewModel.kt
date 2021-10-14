@@ -61,6 +61,33 @@ class CheckoutFragViewModel(application: Application): AndroidViewModel(applicat
         resultCheckoutList.value = newList
     }
 
+    fun loadFromFirebase(data: HeaderOrderFirebaseDataClass?){
+        var newList = ArrayList<DetailTransaksiDataClass>()
+        data?.detail_order?.let { detail ->
+            if (detail.size > 0){
+                for (i in detail){
+                    //check stock on barang tbl
+                    var newData = DetailTransaksiDataClass()
+                    newData.id_detail_transaksi = i.id_detail_transaksi
+                    newData.id_barang = i.id_barang
+                    newData.kode_barang = i.kode_barang
+                    newData.nama_barang = i.nama_barang
+                    newData.stock = i.stock
+
+                    val barang = sqLiteHelper.getBarang(i.id_barang)
+                    if (i.stock > barang.stock){
+                        newData.flag = true
+                        flag = true
+                    }else{
+                        newData.flag = false
+                    }
+                    newList.add(newData)
+                }
+            }
+        }
+        resultCheckoutList.value = newList
+    }
+
     fun deleteFromCheckout(data: DetailTransaksiDataClass){
         val status = sqLiteHelper.deleteCheckout(data.id_detail_transaksi, data.id_barang)
         if (status > -1){
@@ -139,7 +166,41 @@ class CheckoutFragViewModel(application: Application): AndroidViewModel(applicat
                     Log.i("CheckoutFrag","Success save order into firebase")
                 }
             }
-//            referance.child(headerId?: "").setValue(data)
+
+            updateHeaderLocalTransaksi(header)
         }
+    }
+    fun updateHeaderLocalTransaksi(data: HeaderTransaksi){
+        //clear checkout list and create new header()
+        var newData = HeaderTransaksiDataClass()
+        newData.id_transaksi = data.id_transaksi
+        newData.id_detail_transaksi = data.id_detail_transaksi
+        newData.nama_transaksi = data.nama_transaksi
+        newData.status = 2
+
+        val statusHeader = sqLiteHelper.updateHeaderTransaksi(newData)
+        if (statusHeader > -1){
+            Log.i("CheckoutFrag","statusHeader: ${statusHeader}")
+        }else{
+
+        }
+
+        createNewHeader()
+    }
+
+    fun createNewHeader(){
+        //create new header
+        val lastRecord = sqLiteHelper.getLastRecordTransaksiHeader()
+
+        var systemCurrent = System.currentTimeMillis()
+        var data = HeaderTransaksiDataClass()
+        data.id_transaksi = null
+        data.id_detail_transaksi = "${systemCurrent}"
+        data.nama_transaksi = "Order ${(lastRecord.id_transaksi ?: 0) + 1}"
+        data.status = 1
+        sqLiteHelper.insertHeaderTransaksi(data)
+        sharedPref.put(Constants.PREF_ID_DETAIL_TRANSAKSI, "${systemCurrent}")
+
+        loadCheckoutList()
     }
 }

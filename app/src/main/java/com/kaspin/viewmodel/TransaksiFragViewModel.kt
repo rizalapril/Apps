@@ -43,9 +43,9 @@ class TransaksiFragViewModel(application: Application): AndroidViewModel(applica
 
     fun createParentTransaksi(){
         val lastRecord = sqLiteHelper.getLastRecordTransaksiHeader()
+        var systemCurrent = System.currentTimeMillis()
         if (lastRecord.id_transaksi == 0){
             //create init header
-            var systemCurrent = System.currentTimeMillis()
             var data = HeaderTransaksiDataClass()
             data.id_transaksi = null
             data.id_detail_transaksi = "${systemCurrent}"
@@ -60,11 +60,10 @@ class TransaksiFragViewModel(application: Application): AndroidViewModel(applica
                     sharedPref.put(Constants.PREF_ID_DETAIL_TRANSAKSI, lastRecord.id_detail_transaksi)
             }else{
                 //create new header
-                var systemCurrent = System.currentTimeMillis()
                 var data = HeaderTransaksiDataClass()
                 data.id_transaksi = null
                 data.id_detail_transaksi = "${systemCurrent}"
-                data.nama_transaksi = "Order ${lastRecord.id_transaksi ?: 0 + 1}"
+                data.nama_transaksi = "Order ${(lastRecord.id_transaksi ?: 0) + 1}"
                 data.status = 1
                 sqLiteHelper.insertHeaderTransaksi(data)
                 sharedPref.put(Constants.PREF_ID_DETAIL_TRANSAKSI, "${systemCurrent}")

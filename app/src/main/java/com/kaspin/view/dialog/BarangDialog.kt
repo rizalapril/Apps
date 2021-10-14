@@ -59,7 +59,12 @@ class BarangDialog(var context: Activity, val width: Int, val height: Int, val i
             var kdBarang = kdBarang?.text?.toString() ?: ""
             var namaBarang = namaBarang?.text?.toString() ?: ""
             var stockBarang = stockBarang?.text?.toString() ?: ""
-            if (!kdBarang.isNullOrEmpty() || !namaBarang.isNullOrEmpty() || !stockBarang.isNullOrEmpty()){
+
+            if (!namaBarang.isNullOrBlank()){
+
+            }
+
+            if (!namaBarang.isNullOrBlank() || !kdBarang.isNullOrEmpty() || !stockBarang.isNullOrEmpty()){
                 val isInt = CommonUtil.tryParseInt(stockBarang)
                 if (isInt){
                     if (!isEdit){
@@ -69,7 +74,7 @@ class BarangDialog(var context: Activity, val width: Int, val height: Int, val i
                             if (data.nama_barang.equals(namaBarang) && data.stock.equals(stockBarang.toInt())){
                                 Toast.makeText(context, "Tidak ada perubahan data", Toast.LENGTH_SHORT).show()
                             }else{
-                                (parent as BarangActivity)?.updateBarang(data.id_barang, kdBarang, namaBarang, stockBarang.toInt())
+                                (parent as BarangActivity)?.updateBarang(data.id_barang, kdBarang,  namaBarang, stockBarang.toInt())
                             }
                         }
                     }

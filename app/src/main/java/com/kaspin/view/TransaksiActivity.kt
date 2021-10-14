@@ -91,6 +91,8 @@ class TransaksiActivity : BaseActivity(){
     @Subscribe
     public fun onLoadOrder(data: LoadOrder) {
         if(data.isLoad){
+            checkout.isLoadFromFirebase = true
+            checkout.dataFromFirebase = data.data
             checkout()
         }
     }
