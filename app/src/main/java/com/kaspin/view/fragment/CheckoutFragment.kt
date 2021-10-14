@@ -85,7 +85,11 @@ class CheckoutFragment : BaseFragment() {
         }
 
         btnSubmit?.setOnClickListener { v ->
-            viewModel.submitCheckout()
+            if (!isLoadFromFirebase){
+                viewModel.submitCheckout()
+            }else{
+                viewModel.submitCheckoutFirebase(dataFromFirebase)
+            }
         }
 
         btnSaveOrder?.setOnClickListener { v ->
@@ -155,7 +159,11 @@ class CheckoutFragment : BaseFragment() {
     }
 
     fun deleteFromCheckout(data: DetailTransaksiDataClass){
-        viewModel.deleteFromCheckout(data)
+        if (!isLoadFromFirebase){
+            viewModel.deleteFromCheckout(data)
+        }else{
+            viewModel.deleteFromCheckoutFirebase(data)
+        }
     }
 
     fun showNotification(text: String){
@@ -169,7 +177,7 @@ class CheckoutFragment : BaseFragment() {
     fun confirmBtnDialog(){
         layoutDialog?.visibility = View.GONE
         isLoadFromFirebase = false
-        
+
         var data = Checkout()
         data.isOpen = false
         EventBus.getDefault().post(data)

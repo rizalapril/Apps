@@ -24,6 +24,7 @@ class CheckoutFragViewModel(application: Application): AndroidViewModel(applicat
     val resultSubmit = MutableLiveData<Boolean>()
 
     var flag = false
+    var tempListFirebase = ArrayList<DetailTransaksiDataClass>()
 
     fun init(context: Context){
         sqLiteHelper = SQLiteHelper(context)
@@ -87,6 +88,7 @@ class CheckoutFragViewModel(application: Application): AndroidViewModel(applicat
                 resultCheckoutFirebaseSubmit.value = flag
             }
         }
+        tempListFirebase = newList
         resultCheckoutList.value = newList
     }
 
@@ -96,6 +98,36 @@ class CheckoutFragViewModel(application: Application): AndroidViewModel(applicat
             loadCheckoutList()
         }else{
 
+        }
+    }
+
+    fun deleteFromCheckoutFirebase(data: DetailTransaksiDataClass){
+        val status = sqLiteHelper.deleteCheckout(data.id_detail_transaksi, data.id_barang)
+
+        if (tempListFirebase != null){
+            tempListFirebase?.let { list ->
+                val index = list.indexOfFirst { (it.id_detail_transaksi == data.id_detail_transaksi) && (it.id_barang == data.id_barang) }
+                tempListFirebase.removeAt(index)
+                resultCheckoutList.value = tempListFirebase
+
+                updateFlag()
+            }
+        }
+    }
+
+    fun updateFlag(){
+        flag = false
+        if (tempListFirebase.size > 0){
+            tempListFirebase?.let { detail ->
+                for (i in detail){
+                    //check stock on barang tbl
+                    val barang = sqLiteHelper.getBarang(i.id_barang)
+                    if (i.stock > barang.stock){
+                        flag = true
+                    }
+                }
+                resultCheckoutFirebaseSubmit.value = flag
+            }
         }
     }
 
@@ -131,6 +163,47 @@ class CheckoutFragViewModel(application: Application): AndroidViewModel(applicat
                     }
                 }
             }
+
+            resultSubmit.value = success
+        }
+    }
+
+    fun submitCheckoutFirebase(data_: HeaderOrderFirebaseDataClass?){
+        if (!flag){
+            var success = true
+
+            //update status header transaksi
+            val header = sqLiteHelper.getTransaksiHeader(data_?.id_detail_transaksi ?: "")
+            var data = HeaderTransaksiDataClass()
+            data.id_transaksi = header.id_transaksi
+            data.id_detail_transaksi = header.id_detail_transaksi
+            data.nama_transaksi = header.nama_transaksi
+            data.status = 0
+            val statusHeader = sqLiteHelper.updateHeaderTransaksi(data)
+            if (statusHeader > -1){
+                Log.i("CheckoutFrag","statusHeader: ${statusHeader}")
+            }else{
+                success = false
+            }
+
+            //decrease stock barang
+            tempListFirebase?.let { dataCheckout ->
+                if (dataCheckout.size > 0){
+                    for (i in dataCheckout){
+                        val barang = sqLiteHelper.getBarang(i.id_barang)
+                        val updateStockBarang = sqLiteHelper.updateStockBarang(i.id_barang, (barang.stock - i.stock))
+                        if (updateStockBarang > -1){
+                            Log.i("CheckoutFrag","updateStockBarang: ${updateStockBarang}")
+                        }else{
+                            success = false
+                        }
+                    }
+                }
+            }
+
+            //delete data from firebase
+            val deleteData = referance.child(data_?.id ?: "")
+            deleteData.removeValue()
 
             resultSubmit.value = success
         }
