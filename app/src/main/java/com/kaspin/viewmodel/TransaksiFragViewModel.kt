@@ -38,7 +38,7 @@ class TransaksiFragViewModel(application: Application): AndroidViewModel(applica
                 newList.add(data)
             }
         }
-        resultBarangList.postValue(newList)
+        resultBarangList.value = newList
     }
 
     fun createParentTransaksi(){

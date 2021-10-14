@@ -5,10 +5,8 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import com.kaspin.R
 import com.kaspin.base.BaseActivity
-import com.kaspin.data.network.Checkout
-import com.kaspin.data.network.Home
-import com.kaspin.data.network.Order
-import com.kaspin.data.network.TransaksiSuccess
+import com.kaspin.data.model.HeaderOrderFirebaseDataClass
+import com.kaspin.data.network.*
 import com.kaspin.view.fragment.CheckoutFragment
 import com.kaspin.view.fragment.OrderFragment
 import com.kaspin.view.fragment.SuccessFragment
@@ -58,15 +56,9 @@ class TransaksiActivity : BaseActivity(){
     @Subscribe
     public fun onCheckout(data: Checkout) {
         if(data.isOpen){
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.contentDetail, checkout, "checkout")
-                .commit()
+            checkout()
         }else{
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.contentDetail, transaksi, "transaksi")
-                .commit()
+            transaksi()
         }
     }
 
@@ -83,25 +75,44 @@ class TransaksiActivity : BaseActivity(){
     @Subscribe
     public fun onHome(data: Home) {
         if(!data.isHome){
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.contentDetail, transaksi, "transaksi")
-                .commit()
+            transaksi()
         }
     }
 
     @Subscribe
     public fun onOrder(data: Order) {
         if(data.isOpen){
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.contentDetail, order, "order")
-                .commit()
+            order()
         }else{
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.contentDetail, transaksi, "transaksi")
-                .commit()
+            transaksi()
         }
+    }
+
+    @Subscribe
+    public fun onLoadOrder(data: LoadOrder) {
+        if(data.isLoad){
+            checkout()
+        }
+    }
+
+    fun transaksi(){
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.contentDetail, transaksi, "transaksi")
+            .commit()
+    }
+
+    fun checkout(){
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.contentDetail, checkout, "checkout")
+            .commit()
+    }
+
+    fun order(){
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.contentDetail, order, "order")
+            .commit()
     }
 }

@@ -33,7 +33,7 @@ class OrderFragViewModel(application: Application): AndroidViewModel(application
                     dataList.add(data as HeaderOrderFirebaseDataClass)
                 }
 
-                resultOrderList.postValue(dataList)
+                resultOrderList.value = dataList
             }
 
             override fun onCancelled(error: DatabaseError) {

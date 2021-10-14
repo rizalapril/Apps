@@ -114,6 +114,11 @@ class BarangActivity : BaseActivity(){
         })
     }
 
+    override fun onStart() {
+        super.onStart()
+
+    }
+
     fun dismissDialog(){
         layoutDialog?.visibility = View.GONE
     }

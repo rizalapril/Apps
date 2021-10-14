@@ -58,7 +58,7 @@ class CheckoutFragViewModel(application: Application): AndroidViewModel(applicat
             }
             resultCheckoutSubmit.value = flag
         }
-        resultCheckoutList.postValue(newList)
+        resultCheckoutList.value = newList
     }
 
     fun deleteFromCheckout(data: DetailTransaksiDataClass){
