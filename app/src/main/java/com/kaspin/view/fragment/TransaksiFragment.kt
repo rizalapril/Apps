@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kaspin.R
@@ -47,7 +48,7 @@ class TransaksiFragment : BaseFragment() {
         btnCheckout = parent.findViewById(R.id.btnCheckout)
         btnCheckoutLyt = parent.findViewById(R.id.btnCheckoutLayout)
 
-        transaksiList?.layoutManager = LinearLayoutManager(activity as Context)
+        transaksiList?.layoutManager = GridLayoutManager(activity as Context, 2)
 
         transaksiAdapter = TransaksiAdapter(activity as Context, this)
         transaksiList?.adapter = transaksiAdapter

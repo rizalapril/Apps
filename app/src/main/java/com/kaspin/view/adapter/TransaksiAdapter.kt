@@ -34,7 +34,6 @@ class TransaksiAdapter(private val context: Context, val fragment: Fragment?): R
     class VH(view: View): RecyclerView.ViewHolder(view){
         private var parent: TransaksiFragment? = null
 
-        val root = view.rootLayout
         val barangName = view.barangName
         val kodeBarang = view.kodeBarang
         val btnAddToCart = view.addToCart
